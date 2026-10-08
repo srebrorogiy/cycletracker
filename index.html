@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RedTracker.exe</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- 🪟 Второе окно: Календарь -->
+        <div class="win-window">
+            <div class="win-titlebar">
+                <div class="win-title">
+                    <span>📅</span>
+                    <span>Calendar_September.dll</span>
+                </div>
+                <div class="win-controls">
+                    <button class="win-btn">_</button>
+                    <button class="win-btn">✕</button>
+                </div>
+            </div>
+
+            <div class="win-body">
+                <div class="cal-header-bar">
+                    <button class="cal-nav-btn" id="prev-month">&lt;</button>
+                    <span class="cal-month-name" id="current-month-label">Сентябрь 2026</span>
+                    <button class="cal-nav-btn" id="next-month">&gt;</button>
+                </div>
+                <div class="cal-days-grid" id="calendar-weekdays-header">
+                    <div class="cal-weekday">Пн</div>
+                    <div class="cal-weekday">Вт</div>
+                    <div class="cal-weekday">Ср</div>
+                    <div class="cal-weekday">Чт</div>
+                    <div class="cal-weekday">Пт</div>
+                    <div class="cal-weekday">Сб</div>
+                    <div class="cal-weekday">Вс</div>
+                </div>
+                <div class="cal-days-grid" id="calendar-days">
+                </div>
+                <div id="buttons" style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                    <div id="selected-date-label" style="font-size: 11px; font-weight: 800; color: #a8587d; text-align: center;">
+                        Click on the day
+                    </div>
+                    <button class="y2k-action-btn" id="btn-add-period" style="padding: 10px; font-size: 13px;">
+                        <span>Add period</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🪟 Ретро-окно программы RedTracker.exe -->
+        <div class="win-window">
+            <div class="win-titlebar">
+                <div class="win-title">
+                    <span>🌸</span>
+                    <span>RedTracker.exe - Cycle Diary 2000</span>
+                </div>
+                <div class="win-controls">
+                    <button class="win-btn">_</button>
+                    <button class="win-btn">□</button>
+                    <button class="win-btn">✕</button>
+                </div>
+            </div>
+
+            <!-- Меню Word 2000 -->
+            <div class="win-menubar">
+                <span><u>Ф</u>айл</span>
+                <span><u>П</u>равка</span>
+                <span><u>В</u>ид</span>
+                <span><u>С</u>правка</span>
+                <span style="margin-left: auto;">💕 v1.0</span>
+            </div>
+
+            <div class="win-body">
+                <!-- MSN Messenger Облачко с советом дня -->
+                <div class="msn-bubble-container">
+                    <div class="msn-avatar">🐱</div>
+                    <div class="msn-text">
+                        <span id="greeting-text">Привет, подружка! :3</span><br>
+                        Совет: <strong>Сегодня отличный день для шоколадки и отдыха! 🍫✨</strong>
+                    </div>
+                </div>
+
+                <!-- Главный счетчик цикла -->
+                <div class="tracker-screen">
+                    <div class="sparkle-badge" id="phase-text">✧ Фолликулярная фаза ✧</div>
+                    <div class="cycle-big-count" id="current-day-display">14</div>
+                    <div class="cycle-subtext" id="days-left-display">до след. цикла: ~14 дней</div>
+                    
+                    <!-- Y2K полосатый прогресс-бар -->
+                    <div class="y2k-progress-box">
+                        <div class="y2k-progress-bar" id="cycle-progress-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Плашки с прогнозом -->
+                <div class="metrics-grid">
+                    <div class="y2k-metric-card">
+                        <div class="y2k-metric-title">🥚 Овуляция</div>
+                        <div class="y2k-metric-value" id="ovulation-display">18.09</div>
+                    </div>
+                    <div class="y2k-metric-card">
+                        <div class="y2k-metric-title">🩸 След. цикл</div>
+                        <div class="y2k-metric-value" id="prediction-display">02.10</div>
+                    </div>
+                    <div class="y2k-metric-card">
+                        <div class="y2k-metric-title">✨ Шанс</div>
+                        <div class="y2k-metric-value" id="fertility-display">Высокий</div>
+                    </div>
+                </div>
+
+                <!-- 3D Розовая кнопка действия -->
+                <button class="y2k-action-btn" id="btn-log-period">
+                    <span>ОТМЕТИТЬ НАЧАЛО МЕСЯЧНЫХ</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 🪟 Третье окно: Симптомы -->
+        <div class="win-window">
+            <div class="win-titlebar">
+                <div class="win-title">
+                    <span>⭐</span>
+                    <span>Mood_Tracker.exe</span>
+                </div>
+            </div>
+            <div class="win-body">
+                <div class="symptoms-pills" id="symptoms-tags">
+                    <button class="y2k-pill" data-symptom="cramps">⚡ тянет живот</button>
+                    <button class="y2k-pill" data-symptom="tired">😴 усталость</button>
+                    <button class="y2k-pill" data-symptom="happy">🌸 топ настроение</button>
+                    <button class="y2k-pill" data-symptom="chocolate">🍫 хочу сладкого</button>
+                    <button class="y2k-pill" data-symptom="headache">🤕 болит голова</button>
+                    <button class="y2k-pill" data-symptom="energy">🔥 много энергии</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌸 Нижняя панель задач Windows XP Y2K -->
+    <div class="xp-taskbar">
+        <div class="xp-start-btn">
+            <span>🌸</span>
+            <span>Пуск</span>
+        </div>
+        <div class="xp-clock" id="xp-clock">18:54</div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
