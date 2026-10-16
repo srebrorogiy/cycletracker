@@ -16,6 +16,7 @@ saved_end_date = date(2026, 9, 4)
 class PeriodRequest(BaseModel):
     start_date: date
     end_date: date
+    user_id: int
 
 app.mount("/static", StaticFiles(directory="."), name="static")
 
@@ -24,8 +25,8 @@ def get_index():
     return FileResponse("index.html")
 
 @app.get("/api/cycles")
-def get_cycles():
-    records = get_all_cycles(user_id=1)
+def get_cycles(user_id:int):
+    records = get_all_cycles(user_id)
     return [
         {
             "id": r[0],
@@ -40,12 +41,12 @@ def get_cycles():
 
 @app.post("/api/cycles")
 def add_cycle(body: PeriodRequest):
-    save_cycle(user_id=1, start_date=body.start_date, end_date=body.end_date, cycle_length=28) # возможно тут еще нужно user_id указывать 
+    save_cycle(user_id=body.user_id, start_date=body.start_date, end_date=body.end_date, cycle_length=28) # возможно тут еще нужно user_id указывать 
     return calculate_cycle_info(start_date=body.start_date, end_date=body.end_date, cycle_length=28)
 
 @app.get("/api/cycle-info")
-def get_cycle_info():
-    latest = get_latest_cycle(user_id=1)
+def get_cycle_info(user_id:int):
+    latest = get_latest_cycle(user_id)
     if latest:
         start_date = date.fromisoformat(latest[0])
         end_date = date.fromisoformat(latest[1])

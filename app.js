@@ -10,6 +10,18 @@ if (tg) {
     }
 }
 
+function getUserId() {
+    if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+        return window.Telegram.WebApp.initDataUnsafe.user.id;
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('user_id')) {
+        return Number(params.get('user_id'));
+    }
+
+    return 1;
+}
+
 // Живые ретро-часики в панели Пуск
 function updateClock() {
     const now = new Date();
@@ -191,8 +203,9 @@ document.querySelectorAll('.y2k-pill').forEach(pill => {
 // ==========================================
 
 async function loadCycleDataFromBackend() {
+    const userId = getUserId();
     try {
-        const cycle_data = await fetch('/api/cycles');
+        const cycle_data = await fetch(`/api/cycles?user_id=${userId}`);
         cyclesHistory = await cycle_data.json()
     } catch (e) {
         console.error("Load error:", e);
@@ -203,12 +216,13 @@ async function loadCycleDataFromBackend() {
 }
 
 async function savePeriodStartDate(rangeStart, rangeEnd) {
+    const userId = getUserId();
     const response = await fetch('/api/cycles', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({start_date: rangeStart, end_date: rangeEnd})
+        body: JSON.stringify({start_date: rangeStart, end_date: rangeEnd, user_id: userId})
     });
 
     const NewData = await response.json()
