@@ -1,9 +1,12 @@
 import pytest
+from pathlib import Path
 from phases import phase_of_cycle
 import csv
 
+DATA_FILE = Path(__file__).parent/"test_data.csv"
+
 def loadTestData():
-    with open("test_data.csv") as f:
+    with open(DATA_FILE) as f:
         reader = csv.DictReader(f)
         testData = []
         for row in reader:
