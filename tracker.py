@@ -1,5 +1,4 @@
 from datetime import date, timedelta
-from pydantic import BaseModel
 from phases import phase_of_cycle
 
 test_start = date(2026, 9, 4)
